@@ -1,0 +1,24 @@
+[package]
+name = "proxy_tokio"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+hyper = { version = "0.14.27", features = ["full"] }
+hyper-rustls = "0.24.1"
+rustls = "0.21.7"
+rustls-pemfile = "1.0.3"
+tokio = { version = "1.32.0", features = ["full"] }
+http = "0.2.9"
+tokio-rustls = "0.24.1"
+
+
+[[bin]]
+name = "https_server"
+path = "src/https_server.rs"
+
+[[bin]]
+name = "http_proxy"
+path = "src/http_proxy.rs"
