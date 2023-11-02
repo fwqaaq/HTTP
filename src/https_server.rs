@@ -13,7 +13,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     let (cert, key) = (
         load_certs("ssl/cert.pem")?,
-        load_private_key("ssl/key.pem")?,
+        load_private_key("ssl/private.pem")?,
     );
     let incoming = AddrIncoming::bind(&addr)?;
     let acceptor = TlsAcceptor::builder()
@@ -23,8 +23,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         .with_incoming(incoming);
     let service = make_service_fn(|_| async { Ok::<_, io::Error>(service_fn(handle_request)) });
     let server = Server::builder(acceptor).serve(service);
-    // let server = Server::bind(&addr).serve(service);
-    println!("Listening on https://azure.fwqaq.us:{}", addr.port());
+
+    println!("Listening on https://localhost:{}", addr.port());
     server.await?;
 
     Ok(())
@@ -51,7 +51,8 @@ fn load_private_key(pathname: &str) -> io::Result<rustls::PrivateKey> {
     let keyfile = fs::File::open(pathname).expect("cannot open keyfile");
     let mut reader = io::BufReader::new(keyfile);
 
-    let keys = rustls_pemfile::ec_private_keys(&mut reader).expect("cannot read keyfile");
+    let keys = rustls_pemfile::pkcs8_private_keys(&mut reader).expect("cannot read keyfile");
+
     if keys.len() != 1 {
         panic!("expected a single private key,{}", keys.len());
     }

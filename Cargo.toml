@@ -22,3 +22,7 @@ path = "src/https_server.rs"
 [[bin]]
 name = "http_proxy"
 path = "src/http_proxy.rs"
+
+[[bin]]
+name = "small_chat"
+path = "src/small_chat.rs"
