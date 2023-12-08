@@ -1,5 +1,5 @@
 [package]
-name = "proxy_tokio"
+name = "networking"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,9 +11,11 @@ hyper-rustls = "0.24.1"
 rustls = "0.21.7"
 rustls-pemfile = "1.0.3"
 tokio = { version = "1.32.0", features = ["full"] }
-http = "0.2.9"
+http = "0.2.11"
 tokio-rustls = "0.24.1"
-
+libc = { version = "0.2.150", features = ["use_std", "align"] }
+ifstructs = "0.1.1"
+pnet = "0.34.0"
 
 [[bin]]
 name = "https_server"
@@ -26,3 +28,7 @@ path = "src/http_proxy.rs"
 [[bin]]
 name = "small_chat"
 path = "src/small_chat.rs"
+
+[[bin]]
+name = "arp"
+path = "src/arp.rs"
