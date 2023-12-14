@@ -16,6 +16,15 @@ struct Chat {
     next_id: AtomicI16,
 }
 
+impl Clone for Chat {
+    fn clone(&self) -> Self {
+        Self {
+            clients: self.clients.clone(),
+            next_id: AtomicI16::new(self.next_id.load(Ordering::Relaxed)),
+        }
+    }
+}
+
 impl Chat {
     fn new() -> Self {
         Self {
@@ -58,7 +67,7 @@ impl Chat {
     }
 }
 
-fn handle_client(chat: Arc<Chat>, mut stream: TcpStream, id: i16) {
+fn handle_client(chat: Chat, mut stream: TcpStream, id: i16) {
     let welcome = "Welcome to chat! Please pick a nickname.\n";
     let _ = stream.write(welcome.as_bytes());
 
@@ -95,16 +104,16 @@ fn handle_client(chat: Arc<Chat>, mut stream: TcpStream, id: i16) {
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7711").unwrap();
-    let chat = Arc::new(Chat::new());
+    let chat = Chat::new();
 
     println!("Chat server listening on port {}", SERVER_PORT);
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
         let id = chat.add_client(stream.try_clone().unwrap());
+        let chat_clone = chat.clone();
         println!("Client {} connected", id);
 
-        let chat_clone = Arc::clone(&chat);
         thread::spawn(move || handle_client(chat_clone, stream, id));
     }
 }

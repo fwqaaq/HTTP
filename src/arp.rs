@@ -1,15 +1,13 @@
 extern crate pnet;
 
-use std::env;
-use std::net::{AddrParseError, IpAddr, Ipv4Addr};
-use std::process;
-
 use pnet::datalink::{Channel, MacAddr, NetworkInterface};
-
 use pnet::packet::arp::{ArpHardwareTypes, ArpOperations, ArpPacket, MutableArpPacket};
 use pnet::packet::ethernet::EtherTypes;
 use pnet::packet::ethernet::MutableEthernetPacket;
 use pnet::packet::{MutablePacket, Packet};
+use std::env;
+use std::net::{AddrParseError, IpAddr, Ipv4Addr};
+use std::process;
 
 fn get_mac_through_arp(interface: NetworkInterface, target_ip: Ipv4Addr) -> MacAddr {
     let source_ip = interface
