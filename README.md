@@ -18,6 +18,18 @@ Ethernet II header is 14 bytes long:
 | IEEE 802.1Q VLAN tagging | 0x8100|
 | IEEE 802.1X | 0x888E|
 
+## ARP 协议
+
+![ARP](./utils/arp.png)
+
+## IP 协议
+
+![IP](./utils/ip.png)
+
+### ICMP 协议
+
+参见：<https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol>
+
 ## HTTP Proxy with the hyper library
 
 ## HTTPS Server with the hyper library
