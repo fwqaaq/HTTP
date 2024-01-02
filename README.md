@@ -30,6 +30,8 @@ Ethernet II header is 14 bytes long:
 
 参见：<https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol>
 
+构建 Ping 工具：[Echo Request](https://en.wikipedia.org/wiki/Ping_(networking_utility)#Echo_request)、[Echo Reply](https://en.wikipedia.org/wiki/Ping_(networking_utility)#Echo_reply)
+
 ## HTTP Proxy with the hyper library
 
 ## HTTPS Server with the hyper library
