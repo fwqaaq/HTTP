@@ -1,6 +1,5 @@
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
-use std::sync::atomic::{AtomicI16, Ordering};
 use std::sync::{Arc, Mutex};
 use std::{collections::HashMap, thread};
 
@@ -12,15 +11,15 @@ struct Client {
 }
 
 struct Chat {
-    clients: Arc<Mutex<HashMap<i16, Client>>>,
-    next_id: AtomicI16,
+    clients: Arc<Mutex<HashMap<usize, Client>>>,
+    next_id: usize,
 }
 
 impl Clone for Chat {
     fn clone(&self) -> Self {
         Self {
             clients: self.clients.clone(),
-            next_id: AtomicI16::new(self.next_id.load(Ordering::Relaxed)),
+            next_id: self.next_id,
         }
     }
 }
@@ -29,12 +28,15 @@ impl Chat {
     fn new() -> Self {
         Self {
             clients: Arc::new(Mutex::new(HashMap::new())),
-            next_id: AtomicI16::new(0),
+            next_id: 0,
         }
     }
 
-    fn add_client(&self, stream: TcpStream) -> i16 {
-        let id = self.next_id.fetch_add(1, Ordering::Relaxed);
+    fn add_client(&self, stream: TcpStream) -> usize {
+        let id = stream
+            .peer_addr()
+            .expect("Failed to get peer address")
+            .port() as usize;
         let mut clients = self.clients.lock().unwrap();
         clients.insert(
             id,
@@ -43,20 +45,26 @@ impl Chat {
                 nick: id.to_string(),
             },
         );
+        drop(clients); // Release lock
         id
     }
 
-    fn get_nick(&self, id: i16) -> String {
+    fn get_nick(&self, id: usize) -> String {
         let clients = self.clients.lock().unwrap();
-        clients.get(&id).unwrap().nick.clone()
+        clients
+            .get(&id)
+            .unwrap_or_else(|| panic!("Don't find this {}", id))
+            .nick
+            .clone()
     }
 
-    fn remove_client(&self, id: i16) {
+    fn remove_client(&self, id: usize) {
         let mut clients = self.clients.lock().unwrap();
         clients.remove(&id);
+        drop(clients); // Release lock
     }
 
-    fn broadcast(&self, message: &str, excluded: i16) {
+    fn broadcast(&self, message: &str, excluded: usize) {
         let mut clients = self.clients.lock().unwrap();
         for (id, client) in clients.iter_mut() {
             if *id == excluded {
@@ -67,7 +75,7 @@ impl Chat {
     }
 }
 
-fn handle_client(chat: Chat, mut stream: TcpStream, id: i16) {
+fn handle_client(chat: Chat, mut stream: TcpStream, id: usize) {
     let welcome = "Welcome to chat! Please pick a nickname.\n";
     let _ = stream.write(welcome.as_bytes());
 
@@ -103,7 +111,7 @@ fn handle_client(chat: Chat, mut stream: TcpStream, id: i16) {
 }
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7711").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7711").expect("Failed to bind port");
     let chat = Chat::new();
 
     println!("Chat server listening on port {}", SERVER_PORT);

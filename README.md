@@ -18,23 +18,31 @@ Ethernet II header is 14 bytes long:
 | IEEE 802.1Q VLAN tagging | 0x8100|
 | IEEE 802.1X | 0x888E|
 
-## ARP 协议
+## ARP protocol
 
 ![ARP](./utils/arp.png)
 
-## IP 协议
+## IP protocol
 
 ![IP](./utils/ip.png)
 
-### ICMP 协议
+### ICMP protocol
 
-参见：<https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol>
+Reference: <https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol>
 
-构建 Ping 工具：[Echo Request](https://en.wikipedia.org/wiki/Ping_(networking_utility)#Echo_request)、[Echo Reply](https://en.wikipedia.org/wiki/Ping_(networking_utility)#Echo_reply)
+Build Ping: [Echo Request](https://en.wikipedia.org/wiki/Ping_(networking_utility)#Echo_request), [Echo Reply](https://en.wikipedia.org/wiki/Ping_(networking_utility)#Echo_reply)
 
-## HTTP Proxy with the hyper library
+## HTTP/HTTPS Proxy with the hyper library
 
-## HTTPS Server with the hyper library
+> [!NOTE]
+> Because HTTPS is encrypted, we can only see the CONNECT method with HTTPS connections in HTTP proxies, and we cannot see the real request. And the server cannot use HTTPS, it is generally HTTPS will be upgraded to the CONNECT method, and then use the HTTP protocol to communicate.
+
+Using HTTPS server requires special client support, generally IOS and other devices do not support it.
+
+## HTTPS
+
+> [!WARNING]
+> If you use `0.0.0.0` as server address, and `localhost` has port conflict with it, then it will not report the error that the port have already been used (no error at all).
 
 ```bash
 openssl req -x509 -newkey rsa:4096 -nodes -sha256 -subj /CN=localhost -keyout ssl/private.pem -out ssl/cert.pem 

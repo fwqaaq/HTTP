@@ -12,14 +12,13 @@ rustls = "0.21.7"
 rustls-pemfile = "1.0.3"
 tokio = { version = "1.32.0", features = ["full"] }
 http = "0.2.11"
-tokio-rustls = "0.24.1"
 libc = { version = "0.2.150", features = ["use_std", "align"] }
 ifstructs = "0.1.1"
 pnet = "0.34.0"
 
 [[bin]]
-name = "https_server"
-path = "src/https_server.rs"
+name = "https"
+path = "src/https.rs"
 
 [[bin]]
 name = "http_proxy"
