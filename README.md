@@ -39,6 +39,8 @@ Build Ping: [Echo Request](https://en.wikipedia.org/wiki/Ping_(networking_utilit
 
 Using HTTPS server requires special client support, generally IOS and other devices do not support it.
 
+MIMT -> [Go Proxy](./mitm/main.go), but it is still TCP connecting with the client, and server message is like this: TCP -> HTTP -> TLS (Proxy Request). Only maybe attacker can see the real request for MIMT.
+
 ## HTTPS
 
 > [!WARNING]
