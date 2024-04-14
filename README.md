@@ -53,3 +53,7 @@ openssl req -x509 -newkey rsa:4096 -nodes -sha256 -subj /CN=localhost -keyout ss
 ## smart_chat
 
 Got inspired by this [project](https://github.com/antirez/smallchat)
+
+## What is TCP packet fragmentation?
+
+Please see the [this document](./doc/TCP_fragmentation.md)
