@@ -98,7 +98,7 @@ fn handle_client(chat: Chat, mut stream: TcpStream, id: usize) {
 
                 let mut clients = chat.clients.lock().unwrap();
                 let client = clients.get_mut(&id).unwrap();
-                client.nick = new_nick.clone();
+                client.nick.clone_from(&new_nick);
                 drop(clients); // Release lock
                 chat.broadcast(&format!("Client {} is now known as {}", id, new_nick), id);
             }
