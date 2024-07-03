@@ -1,2 +1,5 @@
 /target
 ssl
+.vscode
+c_network/.xmake
+c_network/build

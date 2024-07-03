@@ -13,7 +13,7 @@ libc = { version = "0.2.150", features = ["use_std", "align"] }
 ifstructs = "0.1.1"
 pnet = "0.35.0"
 http-body-util = "0.1.2"
-hyper-util = "0.1.5"
+hyper-util = { version = "0.1.5", features = ["full"] }
 bytes = "1.6.0"
 
 [[bin]]
