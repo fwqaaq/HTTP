@@ -4,6 +4,9 @@ add_rules("plugin.compile_commands.autoupdate", {outputdir = ".vscode", lsp = "c
 target("tcpclient")
     set_kind("binary")
     add_files("src/tcpclient.c")
+target("tcpserver")
+    set_kind("binary")
+    add_files("src/tcpserver.c")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
