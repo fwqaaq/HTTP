@@ -1,4 +1,5 @@
 #include "tcpserver.h"
+#include <arpa/inet.h>
 #include <errno.h>
 #include <netinet/in.h>
 #include <stdarg.h>
@@ -26,7 +27,9 @@ int create_tcp_server() {
     server_addr.sin_family = AF_INET;
     // INADDR_ANY(0.0.0.0) allows the server to accept a client connection on
     // any interface
+    // htonl -> host to network long
     server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    // htons -> host to network short
     server_addr.sin_port = htons(SERVER_PORT);
 
     // bind the socket
@@ -57,8 +60,13 @@ int acceptClient(int fd) {
     while (1) {
         struct sockaddr_in client_addr;
         socklen_t client_addr_len = sizeof(client_addr);
+        char client_address[MAXLINE + 1];
 
         conn = accept(fd, (struct sockaddr *)&client_addr, &client_addr_len);
+
+        // https://www.cnblogs.com/fortunely/p/14916296.html#21-inet_aton%E5%87%BD%E6%95%B0
+        inet_ntop(AF_INET, &client_addr, client_address, MAXLINE);
+        printf("accept a connection from %s\n", client_address);
 
         if (conn < 0) {
             if (errno == EINTR) {
