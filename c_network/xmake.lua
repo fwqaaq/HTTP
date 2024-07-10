@@ -11,6 +11,9 @@ target("thread_server")
     set_kind("binary")
     add_files("src/thread_server.c")
     add_files("src/lib/_queue.c")
+target("select_server")
+    set_kind("binary")
+    add_files("src/selectserver.c")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

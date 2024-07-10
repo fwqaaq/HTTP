@@ -8,9 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
-#include <sys/_endian.h>
-#include <sys/_types/_socklen_t.h>
-#include <sys/_types/_va_list.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -55,28 +52,21 @@ int create_tcp_server() {
     return fd;
 }
 
-int acceptClient(int fd) {
+int accept_client(int fd) {
     int conn;
-    while (1) {
-        struct sockaddr_in client_addr;
-        socklen_t client_addr_len = sizeof(client_addr);
-        char client_address[MAXLINE + 1];
+    struct sockaddr_in client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
+    char client_address[MAXLINE + 1];
 
-        conn = accept(fd, (struct sockaddr *)&client_addr, &client_addr_len);
+    conn = accept(fd, (struct sockaddr *)&client_addr, &client_addr_len);
 
-        // https://www.cnblogs.com/fortunely/p/14916296.html#21-inet_aton%E5%87%BD%E6%95%B0
-        inet_ntop(AF_INET, &client_addr, client_address, MAXLINE);
-        printf("accept a connection from %s\n", client_address);
+    // https://www.cnblogs.com/fortunely/p/14916296.html#21-inet_aton%E5%87%BD%E6%95%B0
+    inet_ntop(AF_INET, &client_addr, client_address, MAXLINE);
+    printf("accept a connection from %s\n", client_address);
 
-        if (conn < 0) {
-            if (errno == EINTR) {
-                continue;
-            } else {
-                err_n_die("accept error.");
-                return -1;
-            }
-        }
-        break;
+    if (conn < 0) {
+        err_n_die("accept error.");
+        return -1;
     }
 
     return conn;
@@ -93,7 +83,7 @@ int main(int argc, char **argv) {
     }
 
     while (1) {
-        int client_scoket = acceptClient(server_socket);
+        int client_scoket = accept_client(server_socket);
         int n;
         while ((n = read(client_scoket, recvline, MAXLINE - 1)) > 0) {
             fprintf(stdout, "\n%s\n\n%s", bin2hex(recvline, n), recvline);

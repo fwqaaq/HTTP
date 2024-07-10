@@ -6,10 +6,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/_pthread/_pthread_cond_t.h>
-#include <sys/_pthread/_pthread_mutex_t.h>
-#include <sys/_pthread/_pthread_t.h>
-#include <sys/_types/_socklen_t.h>
 #include <sys/socket.h>
 #include <sys/syslimits.h>
 #include <unistd.h>
@@ -126,12 +122,17 @@ void *handle_connection(void *p_client_socket) {
     }
 
     check(bytes_read, "recv failed");
-    buffer[msg_size - 1] = 0; // null-terminate the message and remove the \n
+    // null-terminate the message and remove the \n
+    // Because the message is a file path, causing the file path to be
+    // incorrect (realpath or fopen error)
+    buffer[msg_size - 1] = 0; // '\0' is the end of string
 
     printf("Received message: %s\n", buffer);
     fflush(stdout);
 
-    // validate the path
+    // actual_path saves the resolved path
+    // 1st argument: the path
+    // 2nd argument: the resolved path (for buffer of saving the resolved path)
     if (realpath(buffer, actual_path) == NULL) {
         printf("ERROR(bad path): %s\n", buffer);
         close(client_socket);
