@@ -8,7 +8,6 @@
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/syslimits.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 #define BUFFER_SIZE 4096
@@ -19,7 +18,7 @@
 void *handle_connection(int client_socket);
 int check(int exp, const char *msg);
 int accept_client(int server_socket);
-int create_tcp_server(__uint16_t port, int max_clients);
+int create_tcp_server(uint16_t port, int max_clients);
 
 int main(int argc, char **argv) {
     int server_socket = create_tcp_server(SERVER_PORT, SERVER_BACKLOG);
@@ -77,7 +76,7 @@ int main(int argc, char **argv) {
     }
 }
 
-int create_tcp_server(__uint16_t port, int backlog) {
+int create_tcp_server(uint16_t port, int backlog) {
     int server_socket, client_socket, addr_size;
     struct sockaddr_in server_addr;
 

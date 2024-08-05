@@ -7,7 +7,7 @@ use tokio::net::TcpListener;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
     let listener = TcpListener::bind(addr).await?;
-    println!("Listening on http://azure.fwqaq.us:{}", addr.port());
+    println!("List ening on http://azure.fwqaq.us:{}", addr.port());
 
     loop {
         let (mut socket, _) = listener.accept().await?;
