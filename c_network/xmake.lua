@@ -33,4 +33,3 @@ target("mmap_file")
 target("usagememory")
     set_kind("binary")
     add_files("src/memory/usagememory.c")
-

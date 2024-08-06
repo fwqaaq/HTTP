@@ -20,3 +20,7 @@
   * `fd`: The file descriptor of the file which is mapped. If `MAP_ANONYMOUS` is set, `fd` is ignored and should be -1.
   * `offset`: The offset in the file where the mapping starts. Must be a multiple of the page size (usually 4096).
 * `munmap(void *addr, size_t length)`: Deletes the mapping for the specified address range.
+
+## Shared Memory
+
+MacOS does not support `shmget` function, but it does support `shm_open` and `mmap` function. So please use `shm_open` and `mmap` to create shared memory on MacOS.
